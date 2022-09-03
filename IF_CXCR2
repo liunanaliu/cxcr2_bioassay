@@ -1,0 +1,75 @@
+RGB format -- histogram 
+measure area,  gray value, standard deviation  of the whole slide 
+
+for example, measure the area as well as the fluorescence intensity of a blob of cells 
+making up an embryo.
+
+###
+the first thing is to split this composite image (8 bit) into separate channels.
+image -- color -- split channels
+make sure to work on a duplicte of the original image
+and remane the duplicated image 
+
+###
+it is usually easier to work with a grayscale image, so change the current LUT / RGB to grays
+lut -- grays
+
+###
+we will need to indicate the measurements we want as data 
+analyze -- set measurements 
+tick the measurement required, 
+let us do area, peimeter (which is also the circumference of the bold), and for intensity,
+including mean gray value, and integrated density.
+
+mean is the sum of the gray values of all the pixels in the selection divided by the number of pixels,
+integrated density (IntDen) is the sum of pixel values divided by the area, is the mean x the area of the roi
+raw integrated density (RawIntDen) is the sum of pixels in the selection, this measurement automatically comes up when IntDen is checked.
+
+since we will be using thresholding, make sure 'limit to threshold' is checked
+
+###
+note that the area of the selection is in units squared IF the images is calibrated (otherwise it will be in pixels squared)
+
+# now let us do thresholding
+image -- adjust -- threshold
+let us work wiht Otsu
+
+if you want to remove imperfections in the thresholded image, you need to create a binary image.
+remember that clicking 'Apply' creates a binary image, but we can do this in another way.
+
+###
+let me show you a different way of creating a binary image, while keeping hte original image as is.
+edit -- selection -- create mask
+the original image that was threshold can still be reset.
+
+###
+we can fill up the holes, remove isolated pixels and smoothen the binary image.
+process -- binary -- fill holes
+process -- binary -- open
+
+###
+now since we just have 1 bolb to measure, we can select it using
+edit -- selection -- create selection
+
+###
+if you directly to analyze -- measure, the values you get would be for the binary image (which is not ideal for the intensity measurement)
+so we need to put this selection in the ROI manager, 
+analyze -- tools -- roi manager
+choose add on the roi manager
+we can also rename the selection
+
+and apply the selection to the original embryo image
+clicking on measure on the roi manager adds measurements to the results table.
+
+###
+we can also take measurement of the fluorescence intensity of the other channel within the same roi.
+and we can also threshold this channel to get the overall fluorescence of the cells
+image -- adjust -- threshold 
+
+without changing this selection to binary, go to edit -- selection -- create selection
+add the selection to the roi manager, and rename it.
+
+
+
+
+
